@@ -92,9 +92,7 @@
         gap: 8px;
     }
     
-    #save-note-btn { min-width: 87.5px; white-space: nowrap; }
-    #toggle-sidebar-btn { min-width: 125px; }
-    #read-aloud-btn { background-color: #2a5a7a; }
+    #save-note-btn { min-width: 113.75px; white-space: nowrap; }
     #settings-btn { min-width: 92.5px; }
 
     #decrease-speed-btn, #increase-speed-btn { padding: 6px 16px; }
@@ -106,25 +104,24 @@
         min-width: 40px; text-align: center;
     }
     
-    #focus-mode-btn, #pause-resume-btn, #repeat-x2-btn, #practice-btn, #typing-cursor-btn {
+    #focus-mode-btn, #pause-resume-btn, #repeat-x2-btn, #practice-btn, #typing-cursor-btn, #cancel-practice-btn, #main-practice-focus-btn {
         min-width: 86px;
     }
 
-    #focus-mode-btn.active, #typing-cursor-btn.active, #repeat-x2-btn.active, #practice-btn.active {
+    #focus-mode-btn.active, #typing-cursor-btn.active, #repeat-x2-btn.active, #practice-btn.active, #main-practice-focus-btn.active {
         background-color: #6a6aff;
     }
     #pause-resume-btn .play-icon { display: none; }
     #pause-resume-btn.paused .play-icon { display: block; }
     #pause-resume-btn.paused .pause-icon { display: none; }
 
-    .sentence-container {
+    .sentence-container, .practice-sentence-container {
         display: inline;
         transition: opacity 0.5s ease-in-out;
     }
-    .sentence-container.dimmed { opacity: 0.3; }
+    .sentence-container.dimmed, .practice-sentence-container.dimmed { opacity: 0.3; }
 
     .ribbon-btn:hover { background-color: #444444; }
-    #read-aloud-btn:hover { background-color: #3a7a9a; }
     
     .ribbon-btn svg {
         fill: #f0f0f0; flex-shrink: 0; 
@@ -291,10 +288,6 @@
 <!-- Ribbon for controls -->
 <div id="ribbon">
     <div id="controls-wrapper">
-        <button id="toggle-sidebar-btn" class="ribbon-btn" title="Toggle Saved Notes Panel">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
-            <span>Saved Notes</span>
-        </button>
         <!-- Standard Controls -->
         <div id="standard-controls" style="display: flex; gap: 8px; align-items: center;">
             <input type="text" id="category-input" placeholder="Enter or select category">
@@ -308,6 +301,10 @@
             <button id="read-aloud-btn" class="ribbon-btn" title="Read the current note aloud">
                 <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px"><g><rect fill="none" height="24" width="24"/></g><g><path d="M8,5v14l11-7L8,5z"/></g></svg>
                 <span>Read Aloud</span>
+            </button>
+             <button id="main-practice-btn" class="ribbon-btn" title="Practice this note">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                <span>Practice</span>
             </button>
         </div>
         <!-- Speech Controls -->
@@ -343,9 +340,20 @@
                 <span>Pause</span>
             </button>
         </div>
+        <!-- Practice Controls -->
+        <div id="practice-controls" class="is-hidden" style="display: flex; gap: 8px; align-items: center;">
+             <button id="main-practice-focus-btn" class="ribbon-btn" title="Toggle Focus Mode">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 6c3.79 0 7.17 2.13 8.82 5.5C19.17 14.87 15.79 17 12 17s-7.17-2.13-8.82-5.5C4.83 8.13 8.21 6 12 6m0-2C7 4 2.73 7.11 1 11.5 2.73 15.89 7 19 12 19s9.27-3.11 11-7.5C21.27 7.11 17 4 12 4zm0 5c1.38 0 2.5 1.12 2.5 2.5S13.38 14 12 14s-2.5-1.12-2.5-2.5S10.62 9 12 9m0-2c-2.48 0-4.5 2.02-4.5 4.5S9.52 16 12 16s4.5-2.02 4.5-4.5S14.48 7 12 7z"/></svg>
+                <span>Focus</span>
+            </button>
+             <button id="cancel-practice-btn" class="ribbon-btn" title="Exit Practice Mode">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+                <span>Cancel</span>
+            </button>
+        </div>
         <!-- Settings Button -->
          <button id="settings-btn" class="ribbon-btn" title="Settings">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61-.25-1.17-.59-1.69-.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
         </button>
     </div>
 </div>
@@ -387,7 +395,6 @@
         const notepad = document.getElementById('notepad');
         const sidebar = document.getElementById('sidebar');
         const saveNoteBtn = document.getElementById('save-note-btn');
-        const toggleSidebarBtn = document.getElementById('toggle-sidebar-btn');
         const savedNotesList = document.getElementById('saved-notes-list');
         const deleteAllBtn = document.getElementById('delete-all-btn');
         const categoryFilter = document.getElementById('category-filter');
@@ -414,6 +421,10 @@
         const mainContent = document.getElementById('main-content');
         const repeatX2Btn = document.getElementById('repeat-x2-btn');
         const practiceBtn = document.getElementById('practice-btn');
+        const mainPracticeBtn = document.getElementById('main-practice-btn');
+        const practiceControls = document.getElementById('practice-controls');
+        const cancelPracticeBtn = document.getElementById('cancel-practice-btn');
+        const mainPracticeFocusBtn = document.getElementById('main-practice-focus-btn');
 
         let currentlyEditingId = null; 
         const originalSaveButtonContent = saveNoteBtn.innerHTML;
@@ -432,6 +443,10 @@
         let resumeFromIndex = 0;
         let sentenceRepeatCount = 1;
         let practiceBlanksRemaining = 0;
+        
+        let mainPracticeSentenceIndex = 0;
+        let mainPracticeSentencesData = [];
+        let isMainPracticeFocusActive = false;
 
         let touchStartX = 0;
         let touchEndX = 0;
@@ -460,7 +475,6 @@
         renderCategoryDropdowns();
 
         // --- Event Listeners ---
-        toggleSidebarBtn.addEventListener('click', () => sidebar.classList.toggle('is-closed'));
         notepad.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') { e.preventDefault(); document.execCommand('insertLineBreak'); }
         });
@@ -475,6 +489,8 @@
             renderSavedNotes(selectedCategory);
         });
         readAloudBtn.addEventListener('click', handleReadAloud);
+        mainPracticeBtn.addEventListener('click', handleMainPractice);
+        cancelPracticeBtn.addEventListener('click', endMainPractice);
         settingsBtn.addEventListener('click', openSettingsModal);
         closeModalBtn.addEventListener('click', closeSettingsModal);
         modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeSettingsModal(); });
@@ -498,6 +514,12 @@
             isPracticeModeActive = practiceBtn.classList.toggle('active');
         });
 
+        mainPracticeFocusBtn.addEventListener('click', () => {
+            isMainPracticeFocusActive = mainPracticeFocusBtn.classList.toggle('active');
+            applyMainPracticeFocus();
+        });
+
+
         // --- GESTURE CONTROLS ---
         mainContent.addEventListener('touchstart', (e) => {
             if (sidebar.contains(e.target) && !sidebar.classList.contains('is-closed')) {
@@ -517,18 +539,25 @@
             const swipeDistance = touchEndX - touchStartX;
             if (Math.abs(swipeDistance) < swipeThreshold) return;
 
-            const isReading = !readAloudDisplay.classList.contains('is-hidden');
+            const isReading = !speechControls.classList.contains('is-hidden');
+            const isMainPracticing = !practiceControls.classList.contains('is-hidden');
 
             if (isReading) {
-                if (swipeDistance > 0) { // Left to right
+                if (swipeDistance > 0) {
                     handleCancelSpeech();
-                } else { // Right to left
+                } else {
                     handlePreviousSentence();
                 }
+            } else if (isMainPracticing) {
+                if(swipeDistance > 0) {
+                    endMainPractice();
+                } else {
+                    handleMainPracticePreviousSentence();
+                }
             } else {
-                if (swipeDistance > 0) { // Left to right
+                if (swipeDistance > 0) {
                     sidebar.classList.remove('is-closed');
-                } else { // Right to left
+                } else {
                     sidebar.classList.add('is-closed');
                 }
             }
@@ -866,11 +895,10 @@
                 let savedSettings = localStorage.getItem('speechHighlightSettings');
                 let parsedSettings = savedSettings ? JSON.parse(savedSettings) : JSON.parse(JSON.stringify(defaultPosSettings));
 
-                // Backwards compatibility for old settings format
-                currentPosSettings = parsedSettings.map(setting => ({
-                    ...setting,
-                    practiceEnabled: setting.practiceEnabled === undefined ? false : setting.practiceEnabled
-                }));
+                currentPosSettings = defaultPosSettings.map(defaultSetting => {
+                    const saved = parsedSettings.find(s => s.name === defaultSetting.name);
+                    return { ...defaultSetting, ...saved };
+                });
 
             } catch (e) {
                 console.error("Failed to load settings, using defaults.", e);
@@ -878,6 +906,7 @@
             }
             applyColorStyles();
         }
+
 
         function saveSettings() {
             localStorage.setItem('speechHighlightSettings', JSON.stringify(currentPosSettings));
@@ -949,7 +978,7 @@
                 standardControls.classList.add('is-hidden');
                 speechControls.classList.remove('is-hidden');
                 settingsBtn.classList.add('is-hidden');
-                toggleSidebarBtn.classList.add('is-hidden');
+                practiceControls.classList.add('is-hidden');
                 startSpeech(currentSpeechText, 0);
             }, 150);
         }
@@ -967,7 +996,6 @@
             speechControls.classList.add('is-hidden');
             standardControls.classList.remove('is-hidden');
             settingsBtn.classList.remove('is-hidden');
-            toggleSidebarBtn.classList.remove('is-hidden');
             utterances = []; allWordData = []; sentencesData = []; currentWordIndex = 0; currentUtteranceIndex = 0;
             currentSpeechText = '';
             
@@ -978,6 +1006,185 @@
             pauseResumeText.textContent = 'Pause';
             pauseResumeBtn.title = 'Pause';
         }
+        
+        // --- MAIN PRACTICE MODE FUNCTIONS ---
+        function handleMainPractice() {
+            const text = notepad.innerText.trim();
+            if(text === '') {
+                alert('Please write something in the note to practice.');
+                return;
+            }
+            
+            notepad.classList.add('is-hidden');
+            readAloudDisplay.classList.remove('is-hidden');
+            standardControls.classList.add('is-hidden');
+            speechControls.classList.add('is-hidden');
+            settingsBtn.classList.add('is-hidden');
+            practiceControls.classList.remove('is-hidden');
+            
+            mainPracticeSentencesData = [];
+            let doc = nlp(text);
+            const sentences = doc.sentences();
+            sentences.forEach(sentence => {
+                const sentenceWordData = [];
+                sentence.json()[0].terms.forEach(term => {
+                    sentenceWordData.push({
+                        fullText: term.pre + term.text + term.post,
+                        pos: getPartOfSpeech(term.tags)
+                    });
+                });
+                mainPracticeSentencesData.push(sentenceWordData);
+            });
+            
+            mainPracticeSentenceIndex = 0;
+            readAloudDisplay.innerHTML = '';
+            renderNextPracticeSentence();
+        }
+
+        function applyMainPracticeFocus() {
+            const allSentences = readAloudDisplay.querySelectorAll('.practice-sentence-container');
+            allSentences.forEach((sentence, index) => {
+                if (isMainPracticeFocusActive && index < allSentences.length - 1) {
+                    sentence.classList.add('dimmed');
+                } else {
+                    sentence.classList.remove('dimmed');
+                }
+            });
+        }
+        
+        function renderNextPracticeSentence() {
+            if (mainPracticeSentenceIndex >= mainPracticeSentencesData.length) {
+                setTimeout(endMainPractice, 1000);
+                return;
+            }
+            
+            if(isMainPracticeFocusActive) {
+                applyMainPracticeFocus();
+            }
+
+            const sentenceData = mainPracticeSentencesData[mainPracticeSentenceIndex];
+            const sentenceDiv = document.createElement('div');
+            sentenceDiv.className = 'practice-sentence-container';
+            
+            let blanksInThisSentence = 0;
+
+            const tempSpan = document.createElement('span');
+            document.body.appendChild(tempSpan);
+            tempSpan.style.fontSize = getComputedStyle(readAloudDisplay).fontSize;
+            tempSpan.style.fontFamily = getComputedStyle(readAloudDisplay).fontFamily;
+            tempSpan.style.letterSpacing = getComputedStyle(readAloudDisplay).letterSpacing;
+            tempSpan.style.position = 'absolute';
+            tempSpan.style.visibility = 'hidden';
+
+            sentenceData.forEach(wordData => {
+                const posSetting = currentPosSettings.find(s => s.name === wordData.pos);
+                if (posSetting && posSetting.practiceEnabled) {
+                    blanksInThisSentence++;
+                    const blankSpan = document.createElement('span');
+                    blankSpan.className = 'practice-blank';
+
+                    tempSpan.textContent = wordData.fullText;
+                    const wordWidth = tempSpan.offsetWidth;
+                    blankSpan.style.width = `${wordWidth}px`;
+
+                    blankSpan.dataset.word = wordData.fullText;
+                    blankSpan.dataset.pos = wordData.pos;
+                    blankSpan.addEventListener('click', handleMainPracticeBlankClick, { once: true });
+                    sentenceDiv.appendChild(blankSpan);
+                } else {
+                    const wordSpan = document.createElement('span');
+                    wordSpan.textContent = wordData.fullText;
+                    if (posSetting && posSetting.enabled) {
+                        wordSpan.className = posSetting.name;
+                    }
+                    sentenceDiv.appendChild(wordSpan);
+                }
+            });
+            
+            sentenceDiv.dataset.blanksRemaining = blanksInThisSentence;
+            readAloudDisplay.appendChild(sentenceDiv);
+            
+            if(isMainPracticeFocusActive) {
+                applyMainPracticeFocus();
+            }
+
+            checkAndScroll(sentenceDiv);
+            document.body.removeChild(tempSpan);
+            
+            mainPracticeSentenceIndex++;
+
+            if (blanksInThisSentence === 0) {
+                setTimeout(renderNextPracticeSentence, 500);
+            }
+        }
+
+        function handleMainPracticePreviousSentence() {
+            if(mainPracticeSentenceIndex < 2) return;
+            
+            mainPracticeSentenceIndex = Math.max(0, mainPracticeSentenceIndex - 2);
+
+            readAloudDisplay.innerHTML = '';
+
+            for(let i = 0; i < mainPracticeSentenceIndex; i++) {
+                const sentenceData = mainPracticeSentencesData[i];
+                const sentenceDiv = document.createElement('div');
+                sentenceDiv.className = 'practice-sentence-container';
+                if(isMainPracticeFocusActive) {
+                    sentenceDiv.classList.add('dimmed');
+                }
+                sentenceData.forEach(wordData => {
+                    const wordSpan = document.createElement('span');
+                    wordSpan.textContent = wordData.fullText;
+                    const posSetting = currentPosSettings.find(s => s.name === wordData.pos);
+                     if (posSetting && posSetting.enabled) {
+                        wordSpan.className = posSetting.name;
+                    }
+                    sentenceDiv.appendChild(wordSpan);
+                });
+                readAloudDisplay.appendChild(sentenceDiv);
+            }
+            
+            renderNextPracticeSentence();
+        }
+
+
+        function handleMainPracticeBlankClick(event) {
+            const blankSpan = event.target;
+            const sentenceContainer = blankSpan.closest('.practice-sentence-container');
+            const word = blankSpan.dataset.word;
+            const pos = blankSpan.dataset.pos;
+            const posSetting = currentPosSettings.find(s => s.name === pos);
+
+            const revealedSpan = document.createElement('span');
+            revealedSpan.textContent = word;
+            if (posSetting && posSetting.enabled) {
+                revealedSpan.className = pos;
+            }
+            blankSpan.replaceWith(revealedSpan);
+
+            let remaining = parseInt(sentenceContainer.dataset.blanksRemaining) - 1;
+            sentenceContainer.dataset.blanksRemaining = remaining;
+            
+            if (remaining === 0) {
+                setTimeout(renderNextPracticeSentence, 800);
+            }
+        }
+        
+        function endMainPractice() {
+            readAloudDisplay.innerHTML = '';
+            readAloudDisplay.classList.add('is-hidden');
+            notepad.classList.remove('is-hidden');
+            practiceControls.classList.add('is-hidden');
+            standardControls.classList.remove('is-hidden');
+            settingsBtn.classList.remove('is-hidden');
+            mainPracticeSentencesData = [];
+            mainPracticeSentenceIndex = 0;
+            isMainPracticeFocusActive = false;
+            mainPracticeFocusBtn.classList.remove('active');
+        }
+
+        // --- END MAIN PRACTICE MODE FUNCTIONS ---
+
 
         function checkAndScroll(element) {
             const container = readAloudDisplay;
@@ -1064,16 +1271,16 @@
         
         function setupPracticeSentence(sentenceIndex) {
             const sentenceContainer = sentenceContainers[sentenceIndex];
-            sentenceContainer.classList.remove('dimmed'); // Ensure practice sentence is not dimmed
+            sentenceContainer.classList.remove('dimmed');
             const sentenceData = sentencesData[sentenceIndex];
             sentenceContainer.innerHTML = '';
             practiceBlanksRemaining = 0;
 
             const tempSpan = document.createElement('span');
             document.body.appendChild(tempSpan);
-            tempSpan.style.fontSize = '18.4px';
-            tempSpan.style.fontFamily = "'Inter', 'Courier New', Courier, monospace";
-            tempSpan.style.letterSpacing = '0.5px';
+            tempSpan.style.fontSize = getComputedStyle(readAloudDisplay).fontSize;
+            tempSpan.style.fontFamily = getComputedStyle(readAloudDisplay).fontFamily;
+            tempSpan.style.letterSpacing = getComputedStyle(readAloudDisplay).letterSpacing;
             tempSpan.style.position = 'absolute';
             tempSpan.style.visibility = 'hidden';
 
@@ -1087,10 +1294,10 @@
                     tempSpan.textContent = wordData.fullText;
                     const wordWidth = tempSpan.offsetWidth;
                     blankSpan.style.width = `${wordWidth}px`;
-
+                    
                     blankSpan.dataset.word = wordData.fullText;
                     blankSpan.dataset.pos = wordData.pos;
-                    blankSpan.addEventListener('click', handleBlankClick, { once: true });
+                    blankSpan.addEventListener('click', handleReadingPracticeBlankClick, { once: true });
                     sentenceContainer.appendChild(blankSpan);
                 } else {
                     const wordSpan = document.createElement('span');
@@ -1105,11 +1312,11 @@
             document.body.removeChild(tempSpan);
 
             if (practiceBlanksRemaining === 0) {
-                 setTimeout(() => speakNext(), 1000); // Auto-advance if no practice words
+                 setTimeout(() => speakNext(), 1000);
             }
         }
 
-        function handleBlankClick(event) {
+        function handleReadingPracticeBlankClick(event) {
             const blankSpan = event.target;
             const word = blankSpan.dataset.word;
             const pos = blankSpan.dataset.pos;
@@ -1125,11 +1332,11 @@
             practiceBlanksRemaining--;
 
             if (practiceBlanksRemaining === 0) {
-                const sentenceContainer = revealedSpan.closest('.sentence-container');
+                 const sentenceContainer = revealedSpan.closest('.sentence-container');
                 if (isFocusModeActive && sentenceContainer) {
                     setTimeout(() => sentenceContainer.classList.add('dimmed'), 600);
                 }
-                setTimeout(() => speakNext(), 1200); // Give user a moment to see the completed sentence
+                setTimeout(() => speakNext(), 1200);
             }
         }
 

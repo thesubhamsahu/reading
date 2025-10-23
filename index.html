@@ -8,7 +8,7 @@
     <!-- Google Font Import -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;900&display=swap" rel="stylesheet">
     <!-- compromise.js for NLP -->
     <script src="https://unpkg.com/compromise"></script>
     <!-- Style block for dynamic POS colors -->
@@ -104,13 +104,16 @@
         min-width: 40px; text-align: center;
     }
     
-    #focus-mode-btn, #pause-resume-btn, #repeat-x2-btn, #practice-btn, #typing-cursor-btn, #cancel-practice-btn, #main-practice-focus-btn {
+    #focus-mode-btn, #pause-resume-btn, #repeat-x2-btn, #practice-btn, #cancel-speech-btn, #cancel-practice-btn, #main-practice-focus-btn, #main-practice-read-btn {
         min-width: 86px;
     }
 
-    #focus-mode-btn.active, #typing-cursor-btn.active, #repeat-x2-btn.active, #practice-btn.active, #main-practice-focus-btn.active {
+    #focus-mode-btn.active, #repeat-x2-btn.active, #practice-btn.active, #main-practice-focus-btn.active, #main-practice-read-btn.active {
         background-color: #6a6aff;
     }
+    #cancel-speech-btn, #cancel-practice-btn { background-color: #a13333; }
+    #cancel-speech-btn:hover, #cancel-practice-btn:hover { background-color: #8B0000; }
+    
     #pause-resume-btn .play-icon { display: none; }
     #pause-resume-btn.paused .play-icon { display: block; }
     #pause-resume-btn.paused .pause-icon { display: none; }
@@ -150,10 +153,10 @@
         box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.2);
         border-right: 1px solid #2c2c2c;
         transform: translateX(0);
-        transition: transform 0.3s ease-in-out; /* This creates the animation */
+        transition: transform 0.3s ease-in-out;
     }
     #sidebar.is-closed {
-        transform: translateX(-100%); /* This moves it off-screen */
+        transform: translateX(-100%);
     }
     /* --- END MODIFIED STYLES --- */
 
@@ -213,16 +216,16 @@
         content: "Start writing... Use the save button to keep your notes permanently.";
         color: #666666; pointer-events: none;
     }
-
-    .typing-cursor {
-        display: inline-block;
-        background-color: #aaaaaa;
-        width: 2px;
-        height: 1.2em;
-        margin-left: 2px;
-        vertical-align: text-bottom;
-    }
     
+    .word-span {
+        transition: border-bottom-color 0.1s ease-out;
+        padding-bottom: 2px;
+        border-bottom: 2px solid transparent;
+    }
+    .highlighted-word {
+        border-bottom-color: white;
+    }
+
     .practice-blank {
         color: transparent;
         border-bottom: 2px solid #555;
@@ -232,7 +235,7 @@
         min-width: 1em;
     }
     .practice-blank:hover {
-        border-bottom-color: #888;
+        opacity: 0.8;
     }
 
     /* --- Settings Modal --- */
@@ -316,12 +319,6 @@
             <button id="increase-speed-btn" class="ribbon-btn" title="Increase speech speed">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M18 13h-5v5c0 .55-.45 1-1 1s-1-.45-1-1v-5H6c-.55 0-1-.45-1-1s.45-1 1-1h5V6c0-.55.45-1 1-1s1 .45 1 1v5h5c.55 0 1 .45 1 1s-.45 1-1 1z"/></svg>
             </button>
-            <button id="typing-cursor-btn" class="ribbon-btn" title="Toggle Typing Cursor Effect">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#f0f0f0">
-                    <path d="M11 2v20h2V2z"/>
-                </svg>
-                <span>Cursor</span>
-            </button>
             <button id="focus-mode-btn" class="ribbon-btn" title="Toggle Focus Mode">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 6c3.79 0 7.17 2.13 8.82 5.5C19.17 14.87 15.79 17 12 17s-7.17-2.13-8.82-5.5C4.83 8.13 8.21 6 12 6m0-2C7 4 2.73 7.11 1 11.5 2.73 15.89 7 19 12 19s9.27-3.11 11-7.5C21.27 7.11 17 4 12 4zm0 5c1.38 0 2.5 1.12 2.5 2.5S13.38 14 12 14s-2.5-1.12-2.5-2.5S10.62 9 12 9m0-2c-2.48 0-4.5 2.02-4.5 4.5S9.52 16 12 16s4.5-2.02 4.5-4.5S14.48 7 12 7z"/></svg>
                 <span>Focus</span>
@@ -339,15 +336,23 @@
                 <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M8 5v14l11-7L8 5z"/></svg>
                 <span>Pause</span>
             </button>
+            <button id="cancel-speech-btn" class="ribbon-btn" title="Stop Reading">
+                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 6h12v12H6V6z"/></svg>
+                <span>Cancel</span>
+            </button>
         </div>
         <!-- Practice Controls -->
         <div id="practice-controls" class="is-hidden" style="display: flex; gap: 8px; align-items: center;">
+            <button id="main-practice-read-btn" class="ribbon-btn" title="Toggle Read Before Quiz">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#f0f0f0"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 1H5C2.79 1 1 2.79 1 5v14c0 2.21 1.79 4 4 4h14c2.21 0 4-1.79 4-4V5c0-2.21-1.79-4-4-4zM5 21c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H5zm4.5-9.5L7 13l2.5 1.5L12 13l-2.5-1.5zM17 18H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V8h10v2z"/></svg>
+                <span>Read</span>
+            </button>
              <button id="main-practice-focus-btn" class="ribbon-btn" title="Toggle Focus Mode">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 6c3.79 0 7.17 2.13 8.82 5.5C19.17 14.87 15.79 17 12 17s-7.17-2.13-8.82-5.5C4.83 8.13 8.21 6 12 6m0-2C7 4 2.73 7.11 1 11.5 2.73 15.89 7 19 12 19s9.27-3.11 11-7.5C21.27 7.11 17 4 12 4zm0 5c1.38 0 2.5 1.12 2.5 2.5S13.38 14 12 14s-2.5-1.12-2.5-2.5S10.62 9 12 9m0-2c-2.48 0-4.5 2.02-4.5 4.5S9.52 16 12 16s4.5-2.02 4.5-4.5S14.48 7 12 7z"/></svg>
                 <span>Focus</span>
             </button>
              <button id="cancel-practice-btn" class="ribbon-btn" title="Exit Practice Mode">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 6h12v12H6V6z"/></svg>
                 <span>Cancel</span>
             </button>
         </div>
@@ -417,7 +422,6 @@
         const focusModeBtn = document.getElementById('focus-mode-btn');
         const pauseResumeBtn = document.getElementById('pause-resume-btn');
         const pauseResumeText = pauseResumeBtn.querySelector('span');
-        const typingCursorBtn = document.getElementById('typing-cursor-btn');
         const mainContent = document.getElementById('main-content');
         const repeatX2Btn = document.getElementById('repeat-x2-btn');
         const practiceBtn = document.getElementById('practice-btn');
@@ -425,6 +429,8 @@
         const practiceControls = document.getElementById('practice-controls');
         const cancelPracticeBtn = document.getElementById('cancel-practice-btn');
         const mainPracticeFocusBtn = document.getElementById('main-practice-focus-btn');
+        const cancelSpeechBtn = document.getElementById('cancel-speech-btn');
+        const mainPracticeReadBtn = document.getElementById('main-practice-read-btn');
 
         let currentlyEditingId = null; 
         const originalSaveButtonContent = saveNoteBtn.innerHTML;
@@ -437,7 +443,6 @@
 
         let isSpeechCancelled = false;
         let isFocusModeActive = false;
-        let isTypingCursorActive = false;
         let isPracticeModeActive = false;
         let sentenceContainers = [];
         let resumeFromIndex = 0;
@@ -447,6 +452,7 @@
         let mainPracticeSentenceIndex = 0;
         let mainPracticeSentencesData = [];
         let isMainPracticeFocusActive = false;
+        let isMainPracticeReadActive = false;
 
         let touchStartX = 0;
         let touchEndX = 0;
@@ -498,12 +504,9 @@
         increaseSpeedBtn.addEventListener('click', () => updateSpeechRate('increase'));
         decreaseSpeedBtn.addEventListener('click', () => updateSpeechRate('decrease'));
         focusModeBtn.addEventListener('click', toggleFocusMode);
-        typingCursorBtn.addEventListener('click', () => {
-            isTypingCursorActive = !isTypingCursorActive;
-            typingCursorBtn.classList.toggle('active', isTypingCursorActive);
-            saveUiSettings();
-        });
+
         pauseResumeBtn.addEventListener('click', handlePauseResumeSpeech);
+        cancelSpeechBtn.addEventListener('click', handleCancelSpeech);
         
         repeatX2Btn.addEventListener('click', () => {
             const isActive = repeatX2Btn.classList.toggle('active');
@@ -517,6 +520,12 @@
         mainPracticeFocusBtn.addEventListener('click', () => {
             isMainPracticeFocusActive = mainPracticeFocusBtn.classList.toggle('active');
             applyMainPracticeFocus();
+            saveUiSettings();
+        });
+
+        mainPracticeReadBtn.addEventListener('click', () => {
+            isMainPracticeReadActive = mainPracticeReadBtn.classList.toggle('active');
+            saveUiSettings();
         });
 
 
@@ -538,22 +547,12 @@
         function handleSwipeGesture() {
             const swipeDistance = touchEndX - touchStartX;
             if (Math.abs(swipeDistance) < swipeThreshold) return;
-
+            
             const isReading = !speechControls.classList.contains('is-hidden');
             const isMainPracticing = !practiceControls.classList.contains('is-hidden');
 
-            if (isReading) {
-                if (swipeDistance > 0) {
-                    handleCancelSpeech();
-                } else {
-                    handlePreviousSentence();
-                }
-            } else if (isMainPracticing) {
-                if(swipeDistance > 0) {
-                    endMainPractice();
-                } else {
-                    handleMainPracticePreviousSentence();
-                }
+            if (isReading || isMainPracticing) {
+                // Gestures are disabled in reading and practice modes
             } else {
                 if (swipeDistance > 0) {
                     sidebar.classList.remove('is-closed');
@@ -780,7 +779,8 @@
         function saveUiSettings() {
             const settings = {
                 focus: isFocusModeActive,
-                cursor: isTypingCursorActive
+                practiceFocus: isMainPracticeFocusActive,
+                practiceRead: isMainPracticeReadActive
             };
             localStorage.setItem('uiSettings', JSON.stringify(settings));
         }
@@ -791,15 +791,18 @@
                 if (savedUiSettings) {
                     const settings = JSON.parse(savedUiSettings);
                     isFocusModeActive = settings.focus || false;
-                    isTypingCursorActive = settings.cursor || false;
+                    isMainPracticeFocusActive = settings.practiceFocus || false;
+                    isMainPracticeReadActive = settings.practiceRead || false;
 
                     focusModeBtn.classList.toggle('active', isFocusModeActive);
-                    typingCursorBtn.classList.toggle('active', isTypingCursorActive);
+                    mainPracticeFocusBtn.classList.toggle('active', isMainPracticeFocusActive);
+                    mainPracticeReadBtn.classList.toggle('active', isMainPracticeReadActive);
                 }
             } catch (e) {
                 console.error("Failed to load UI settings, using defaults.", e);
                 isFocusModeActive = false;
-                isTypingCursorActive = false;
+                isMainPracticeFocusActive = false;
+                isMainPracticeReadActive = false;
             }
         }
 
@@ -1038,13 +1041,13 @@
             
             mainPracticeSentenceIndex = 0;
             readAloudDisplay.innerHTML = '';
-            renderNextPracticeSentence();
+            renderNextPracticeStep();
         }
 
         function applyMainPracticeFocus() {
             const allSentences = readAloudDisplay.querySelectorAll('.practice-sentence-container');
-            allSentences.forEach((sentence, index) => {
-                if (isMainPracticeFocusActive && index < allSentences.length - 1) {
+            allSentences.forEach((sentence) => {
+                if (isMainPracticeFocusActive && sentence !== readAloudDisplay.lastElementChild) {
                     sentence.classList.add('dimmed');
                 } else {
                     sentence.classList.remove('dimmed');
@@ -1052,17 +1055,54 @@
             });
         }
         
-        function renderNextPracticeSentence() {
+        function renderNextPracticeStep() {
             if (mainPracticeSentenceIndex >= mainPracticeSentencesData.length) {
                 setTimeout(endMainPractice, 1000);
                 return;
             }
+
+            if(isMainPracticeReadActive) {
+                renderPracticeSentence(mainPracticeSentenceIndex, () => {
+                    renderPracticeQuiz(mainPracticeSentenceIndex);
+                });
+            } else {
+                renderPracticeQuiz(mainPracticeSentenceIndex);
+            }
+        }
+
+        function renderPracticeSentence(index, onComplete) {
+            const sentenceData = mainPracticeSentencesData[index];
+            const sentenceDiv = document.createElement('div');
+            sentenceDiv.className = 'practice-sentence-container';
             
+            sentenceData.forEach(wordData => {
+                 const wordSpan = document.createElement('span');
+                wordSpan.textContent = wordData.fullText;
+                const posSetting = currentPosSettings.find(s => s.name === wordData.pos);
+                if (posSetting && posSetting.enabled) {
+                    wordSpan.className = posSetting.name;
+                }
+                sentenceDiv.appendChild(wordSpan);
+            });
+            
+            readAloudDisplay.appendChild(sentenceDiv);
             if(isMainPracticeFocusActive) {
                 applyMainPracticeFocus();
             }
+            checkAndScroll(sentenceDiv);
+            
+            const advanceToQuiz = () => {
+                readAloudDisplay.removeEventListener('click', advanceToQuiz);
+                if (readAloudDisplay.contains(sentenceDiv)) {
+                    readAloudDisplay.removeChild(sentenceDiv);
+                }
+                onComplete();
+            }
+            readAloudDisplay.addEventListener('click', advanceToQuiz, { once: true });
+        }
 
-            const sentenceData = mainPracticeSentencesData[mainPracticeSentenceIndex];
+        function renderPracticeQuiz(index) {
+            const sentenceData = mainPracticeSentencesData[index];
             const sentenceDiv = document.createElement('div');
             sentenceDiv.className = 'practice-sentence-container';
             
@@ -1086,6 +1126,10 @@
                     tempSpan.textContent = wordData.fullText;
                     const wordWidth = tempSpan.offsetWidth;
                     blankSpan.style.width = `${wordWidth}px`;
+
+                    if (posSetting.enabled) {
+                        blankSpan.style.borderBottomColor = posSetting.color;
+                    }
 
                     blankSpan.dataset.word = wordData.fullText;
                     blankSpan.dataset.pos = wordData.pos;
@@ -1114,37 +1158,36 @@
             mainPracticeSentenceIndex++;
 
             if (blanksInThisSentence === 0) {
-                setTimeout(renderNextPracticeSentence, 500);
+                setTimeout(renderNextPracticeStep, 500);
             }
         }
 
         function handleMainPracticePreviousSentence() {
-            if(mainPracticeSentenceIndex < 2) return;
-            
-            mainPracticeSentenceIndex = Math.max(0, mainPracticeSentenceIndex - 2);
+            if (mainPracticeSentenceIndex < 1) return;
+            mainPracticeSentenceIndex = Math.max(0, mainPracticeSentenceIndex - (isMainPracticeReadActive ? 1 : 2));
 
             readAloudDisplay.innerHTML = '';
 
-            for(let i = 0; i < mainPracticeSentenceIndex; i++) {
+            for (let i = 0; i < mainPracticeSentenceIndex; i++) {
                 const sentenceData = mainPracticeSentencesData[i];
                 const sentenceDiv = document.createElement('div');
                 sentenceDiv.className = 'practice-sentence-container';
-                if(isMainPracticeFocusActive) {
+                if (isMainPracticeFocusActive) {
                     sentenceDiv.classList.add('dimmed');
                 }
                 sentenceData.forEach(wordData => {
                     const wordSpan = document.createElement('span');
                     wordSpan.textContent = wordData.fullText;
                     const posSetting = currentPosSettings.find(s => s.name === wordData.pos);
-                     if (posSetting && posSetting.enabled) {
+                    if (posSetting && posSetting.enabled) {
                         wordSpan.className = posSetting.name;
                     }
                     sentenceDiv.appendChild(wordSpan);
                 });
                 readAloudDisplay.appendChild(sentenceDiv);
             }
-            
-            renderNextPracticeSentence();
+
+            renderNextPracticeStep();
         }
 
 
@@ -1166,7 +1209,7 @@
             sentenceContainer.dataset.blanksRemaining = remaining;
             
             if (remaining === 0) {
-                setTimeout(renderNextPracticeSentence, 800);
+                setTimeout(renderNextPracticeStep, 800);
             }
         }
         
@@ -1179,8 +1222,7 @@
             settingsBtn.classList.remove('is-hidden');
             mainPracticeSentencesData = [];
             mainPracticeSentenceIndex = 0;
-            isMainPracticeFocusActive = false;
-            mainPracticeFocusBtn.classList.remove('active');
+            // The state of the focus button is persisted, so we don't reset it here
         }
 
         // --- END MAIN PRACTICE MODE FUNCTIONS ---
@@ -1205,6 +1247,7 @@
             allWordData = []; utterances = []; sentencesData = []; sentenceContainers = [];
             isSpeechCancelled = false;
             resumeFromIndex = startIndex;
+            let lastHighlightedSpan = null;
 
             if (!('speechSynthesis' in window)) {
                 readAloudDisplay.innerHTML = '<p>Speech synthesis is not supported.</p>';
@@ -1294,6 +1337,10 @@
                     tempSpan.textContent = wordData.fullText;
                     const wordWidth = tempSpan.offsetWidth;
                     blankSpan.style.width = `${wordWidth}px`;
+
+                    if (posSetting.enabled) {
+                        blankSpan.style.borderBottomColor = posSetting.color;
+                    }
                     
                     blankSpan.dataset.word = wordData.fullText;
                     blankSpan.dataset.pos = wordData.pos;
@@ -1344,13 +1391,25 @@
         function speakNext() {
             if (isSpeechCancelled) return;
             
-            const existingCursor = readAloudDisplay.querySelector('.typing-cursor');
-            if (existingCursor) existingCursor.remove();
-
             if (currentUtteranceIndex < utterances.length) {
                 const utterance = utterances[currentUtteranceIndex];
                 const sentenceContainer = sentenceContainers[currentUtteranceIndex];
                 const sentenceData = sentencesData[currentUtteranceIndex];
+                let lastHighlightedSpan = null;
+
+                // Pre-render the full sentence
+                sentenceContainer.innerHTML = '';
+                sentenceData.forEach(wordInfo => {
+                    const span = document.createElement('span');
+                    span.className = 'word-span';
+                    span.textContent = wordInfo.fullText;
+                    const posSetting = currentPosSettings.find(s => s.name === wordInfo.pos);
+                    if (posSetting && posSetting.enabled) {
+                        span.classList.add(wordInfo.pos);
+                    }
+                    sentenceContainer.appendChild(span);
+                });
+
 
                 if (!readAloudDisplay.contains(sentenceContainer)) {
                     readAloudDisplay.appendChild(sentenceContainer);
@@ -1361,86 +1420,47 @@
 
                 utterance.onboundary = (event) => {
                     if (event.name === 'word') {
-                        const boundaryCharIndex = event.charIndex;
-                        let foundWordIndexInSentence = -1;
-                        for (let i = 0; i < sentenceData.length; i++) {
-                            if (sentenceData[i].originalCharIndex <= boundaryCharIndex) {
-                                foundWordIndexInSentence = i;
-                            } else { break; }
+                        if (lastHighlightedSpan) {
+                            lastHighlightedSpan.classList.remove('highlighted-word');
                         }
-                        if (foundWordIndexInSentence > -1) {
-                            const absoluteWordIndex = allWordData.indexOf(sentenceData[foundWordIndexInSentence]);
-                            if (absoluteWordIndex >= currentWordIndex) {
-                               let lastSpan;
-                               const existingCursor = sentenceContainer.querySelector('.typing-cursor');
-                               if(existingCursor) existingCursor.remove();
 
-                               for (let i = currentWordIndex; i <= absoluteWordIndex; i++) {
-                                    const wordToAdd = allWordData[i];
-                                    const span = document.createElement('span');
-                                    span.textContent = wordToAdd.fullText;
-                                    const posSetting = currentPosSettings.find(s => s.name === wordToAdd.pos);
-                                    if (posSetting && posSetting.enabled) { span.className = wordToAdd.pos; }
-                                    sentenceContainer.appendChild(span);
-                                    lastSpan = span;
-                               }
-                               currentWordIndex = absoluteWordIndex + 1;
-                               if (lastSpan) { 
-                                   checkAndScroll(lastSpan); 
-                                   if(isTypingCursorActive) {
-                                       const cursorSpan = document.createElement('span');
-                                       cursorSpan.className = 'typing-cursor';
-                                       lastSpan.insertAdjacentElement('afterend', cursorSpan);
-                                   }
-                               }
+                        let boundaryCharIndex = event.charIndex;
+                        let cumulativeLength = 0;
+                        let wordIndex = -1;
+
+                        for (let i = 0; i < sentenceData.length; i++) {
+                            if (cumulativeLength <= boundaryCharIndex) {
+                                wordIndex = i;
+                            } else {
+                                break;
+                            }
+                            cumulativeLength += sentenceData[i].fullText.length;
+                        }
+                        
+                        if (wordIndex > -1) {
+                            const currentWordSpan = sentenceContainer.children[wordIndex];
+                            if (currentWordSpan) {
+                                currentWordSpan.classList.add('highlighted-word');
+                                lastHighlightedSpan = currentWordSpan;
+                                checkAndScroll(currentWordSpan);
                             }
                         }
                     }
                 };
                 utterance.onend = () => {
+                    if(lastHighlightedSpan) {
+                        lastHighlightedSpan.classList.remove('highlighted-word');
+                    }
                     const justFinishedIndex = currentUtteranceIndex - 1;
-                    const justFinishedContainer = sentenceContainers[justFinishedIndex];
 
-                    const existingCursor = justFinishedContainer.querySelector('.typing-cursor');
-                    if(existingCursor) existingCursor.remove();
-                    
-                    let lastWordSpan;
-                    while(justFinishedContainer.textContent.length < utterances[justFinishedIndex].text.length) {
-                        const nextWordSpan = document.createElement('span');
-                        const nextWordInfo = allWordData[currentWordIndex];
-                        if (!nextWordInfo) break;
-                        nextWordSpan.textContent = nextWordInfo.fullText;
-                        const posSetting = currentPosSettings.find(s => s.name === nextWordInfo.pos);
-                        if (posSetting && posSetting.enabled) { nextWordSpan.className = nextWordInfo.pos; }
-                        justFinishedContainer.appendChild(nextWordSpan);
-                        lastWordSpan = nextWordSpan;
-                        currentWordIndex++;
-                    }
-
-                    if(isTypingCursorActive) {
-                        const finalSpan = lastWordSpan || justFinishedContainer.lastElementChild;
-                        if(finalSpan) {
-                            const cursorSpan = document.createElement('span');
-                            cursorSpan.className = 'typing-cursor';
-                            finalSpan.insertAdjacentElement('afterend', cursorSpan);
-                        }
-                    }
-                    
-                    let timesPlayed = parseInt(justFinishedContainer.dataset.timesPlayed || '0');
-                    const repeatTotal = parseInt(justFinishedContainer.dataset.repeatCount || '1');
+                    let timesPlayed = parseInt(sentenceContainer.dataset.timesPlayed || '0');
+                    const repeatTotal = parseInt(sentenceContainer.dataset.repeatCount || '1');
                     timesPlayed++;
-                    justFinishedContainer.dataset.timesPlayed = timesPlayed;
+                    sentenceContainer.dataset.timesPlayed = timesPlayed;
 
                     if (timesPlayed < repeatTotal) {
                         setTimeout(() => {
-                           justFinishedContainer.innerHTML = ''; 
-                            let wordOffset = 0;
-                            for (let i = 0; i < justFinishedIndex; i++) {
-                                wordOffset += sentencesData[i].length;
-                            }
-                            currentWordIndex = wordOffset;
-
-                            const repeatUtterance = new SpeechSynthesisUtterance(utterances[justFinishedIndex].text);
+                           const repeatUtterance = new SpeechSynthesisUtterance(utterance.text);
                             repeatUtterance.rate = currentSpeechRate;
                             repeatUtterance.onboundary = utterance.onboundary; 
                             repeatUtterance.onend = utterance.onend; 
@@ -1451,7 +1471,7 @@
                             setTimeout(() => setupPracticeSentence(justFinishedIndex), 700);
                         } else {
                             if (isFocusModeActive) { 
-                                justFinishedContainer.classList.add('dimmed'); 
+                                sentenceContainer.classList.add('dimmed'); 
                             }
                             speakNext();
                         }
